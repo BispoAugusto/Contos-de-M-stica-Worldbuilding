@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Contrato futuro de mapa; não implementado",
+  "type": "object", "additionalProperties": false,
+  "required": ["version", "id", "image", "markers"],
+  "properties": {
+    "version": { "const": 1 }, "id": { "type": "string", "minLength": 1 },
+    "image": { "type": "string", "description": "Caminho relativo de imagem local; validar contenção e MIME no servidor." },
+    "markers": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "entityId", "x", "y"], "properties": { "id": { "type": "string" }, "entityId": { "type": "string" }, "x": { "type": "number", "minimum": 0, "maximum": 1 }, "y": { "type": "number", "minimum": 0, "maximum": 1 } } } }
+  }
+}

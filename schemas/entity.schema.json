@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Metadados opcionais de documento",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "type": { "enum": ["nota", "pilar", "local", "personagem", "faccao", "povo", "evento", "criatura", "magia"] },
+    "status": { "enum": ["exemplo", "proposta", "canonico"] },
+    "visibility": { "enum": ["mestre", "jogadores"] },
+    "pillars": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

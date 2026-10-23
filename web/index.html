@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Ateliê de worldbuilding: documentos, vínculos e revisão editorial."><title>Contos de Mística · Ateliê</title><link rel="stylesheet" href="/style.css"><script type="module" src="/app.mjs"></script></head>
+<body>
+<aside class="sidebar">
+  <a class="brand" href="/" aria-label="Início"><span class="sigil">✳</span><span>CONTOS DE MÍSTICA<small>ATELIÊ DE WORLDBUILDING</small></span></a>
+  <div id="connection" class="connection">Conectando ao acervo…</div>
+  <nav aria-label="Áreas de trabalho"><button data-view="library" class="nav active">▤ <span>Acervo</span><kbd>01</kbd></button><button data-view="graph" class="nav">⌘ <span>Conexões</span><kbd>02</kbd></button><button data-view="review" class="nav">◇ <span>Revisão</span><kbd>03</kbd></button><button data-view="future" class="nav">⊞ <span>Expansões</span><kbd>04</kbd></button></nav>
+  <div class="section-label">EXPLORAR DOCUMENTOS <button id="new" aria-label="Criar documento">+</button></div>
+  <label class="search"><span>⌕</span><input id="search" type="search" placeholder="Buscar no acervo…" aria-label="Buscar por título, caminho ou conteúdo"></label>
+  <select id="filter" aria-label="Filtrar tipo de entidade"><option value="">Todos os tipos</option></select>
+  <div id="files" class="file-tree" aria-label="Arquivos Markdown"></div>
+  <footer class="sidebar-foot"><span class="dot"></span> Markdown como fonte de verdade<small>Ateliê v0.1 · MVP</small></footer>
+</aside>
+<main>
+  <header class="topbar"><span>SEU UNIVERSO, EM CONSTRUÇÃO</span><button id="refresh" class="quiet">↻ Atualizar acervo</button></header>
+  <div id="banner" class="banner">Carregando o conteúdo…</div>
+  <div id="message" role="status" aria-live="polite"></div>
+  <section id="library" class="view">
+    <div class="page-heading"><div><p class="eyebrow">BIBLIOTECA DO MUNDO</p><h1>Um lugar para cada ideia.</h1><p class="subtitle">Escreva, conecte e preserve a coerência do seu universo.</p></div><div id="stats" class="stats"></div></div>
+    <div class="workspace"><article class="document"><div class="document-bar"><span id="path">Selecione um documento</span><span id="dirty" class="badge">Salvo</span></div><div class="document-title"><div id="metadata" class="tags"></div><h2 id="title">Seu acervo começa aqui</h2></div><div class="tabs"><button id="read-tab" class="selected">Leitura</button><button id="edit-tab">Markdown</button><span></span><button id="download" class="quiet">Baixar rascunho</button></div><div id="reader" class="prose"></div><label id="editor-label" hidden><span class="sr-only">Conteúdo Markdown</span><textarea id="editor" spellcheck="false"></textarea></label><div class="savebar"><label><input id="confirm-canon" type="checkbox"> Autorizo alterações de cânone ou pilares neste salvamento</label><button id="save" class="primary">Salvar documento</button></div></article>
+    <aside class="context"><div class="context-card"><p class="eyebrow">CONTEXTO EDITORIAL</p><h3>Conexões da página</h3><p class="muted">Vínculos escritos no próprio documento.</p><div id="links"></div><h4>Referenciado por</h4><div id="backlinks"></div></div><div class="context-card principles"><span>◇</span><h3>O cânone é uma decisão.</h3><p>Uma ideia não se torna oficial automaticamente. Pilares e conteúdo canônico exigem confirmação ao salvar.</p><small>Sem metadados? Sem classificação presumida.</small></div><div class="context-card"><p class="eyebrow">VALIDAÇÃO ESTRUTURAL</p><div id="doc-errors"></div><p class="muted">Coerência narrativa ainda exige leitura humana.</p></div></aside></div>
+  </section>
+  <section id="graph" class="view" hidden><p class="eyebrow">RELAÇÕES ENTRE DOCUMENTOS</p><h1>O mundo se conecta.</h1><p class="subtitle">Abra um documento pelo grafo ou pela lista acessível. As relações vêm dos vínculos Markdown.</p><div id="graph-canvas"></div><div id="graph-list" class="cards"></div></section>
+  <section id="review" class="view" hidden><p class="eyebrow">CUIDADO COM O ACERVO</p><h1>Revisão do conteúdo.</h1><p class="subtitle">Checagens locais de metadados e vínculos. Nenhum modelo de IA foi conectado.</p><div id="findings" class="cards"></div></section>
+  <section id="future" class="view" hidden><p class="eyebrow">PRÓXIMOS CAPÍTULOS</p><h1>Espaço para expandir.</h1><p class="subtitle">Contratos definidos na arquitetura. Estes módulos ainda não estão implementados.</p><div class="cards"><article class="context-card"><span class="badge">Planejado</span><h2>Atlas interativo</h2><p>Imagens de mapas e pontos de interesse ligados a IDs de entidades. Coordenadas normalizadas para preservar a escala.</p></article><article class="context-card"><span class="badge">Planejado</span><h2>Canvas de sessões</h2><p>Cartões, imagens e ligações no formato JSON Canvas, separados dos fatos canônicos.</p></article><article class="context-card"><span class="badge">Planejado</span><h2>IA revisora</h2><p>Propostas com fontes, conflitos e diff. Aprovação humana antes de qualquer mudança, sem gravação autônoma.</p></article></div></section>
+</main>
+<dialog id="create-dialog"><form id="create-form"><p class="eyebrow">NOVA PÁGINA</p><h2>Uma ideia começa com uma nota.</h2><label>Caminho relativo<input name="path" required placeholder="notas/minha-ideia.md" pattern=".+\.md"></label><p>Subpastas são criadas ao salvar. A nota começa como proposta, visível ao mestre.</p><div class="dialog-actions"><button type="button" id="cancel-create">Cancelar</button><button class="primary">Criar rascunho</button></div></form></dialog>
+</body></html>
