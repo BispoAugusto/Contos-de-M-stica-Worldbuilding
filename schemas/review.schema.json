@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Contrato futuro de proposta de IA; não executável",
+  "type": "object", "additionalProperties": false,
+  "required": ["baseCommit", "sources", "conflicts", "questions", "proposedChanges", "requiresHumanApproval"],
+  "properties": {
+    "baseCommit": { "type": "string", "minLength": 1 },
+    "requiresHumanApproval": { "const": true },
+    "sources": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["path", "sha", "reason"], "properties": { "path": { "type": "string" }, "sha": { "type": "string" }, "reason": { "type": "string" } } } },
+    "conflicts": { "type": "array", "items": { "type": "string" } },
+    "questions": { "type": "array", "items": { "type": "string" } },
+    "proposedChanges": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["path", "diff", "rationale"], "properties": { "path": { "type": "string" }, "diff": { "type": "string" }, "rationale": { "type": "string" } } } }
+  }
+}
