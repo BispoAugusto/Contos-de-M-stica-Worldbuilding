@@ -12,6 +12,8 @@ Portanto não existiam README, árvore de diretórios, AGENTS.md ou conteúdo ca
 web/             interface sem dependências externas
 shared/          metadados, resolução de vínculos, índice e revisão estrutural
 server/          HTTP local, validação e provedores local/GitHub
+api/             entradas Vercel com autenticação de autor
+scripts/         build com lista explícita de arquivos públicos
 world/           conteúdo do autor (inicialmente só orientação administrativa)
 examples/world/  demonstração explicitamente não canônica
 schemas/         contratos para entidades, mapas e revisão por IA
@@ -53,7 +55,7 @@ pillars: []
 ## API e persistência
 
 - `GET /api/session`: modo e nonce CSRF, sem credenciais GitHub.
-- `GET /api/index`: arquivos, metadados, vínculos, backlinks e achados estruturais.
+- `GET /api/catalog`: arquivos, metadados, vínculos, backlinks e achados estruturais. `/api/index` permanece como alias local.
 - `PUT /api/document`: `{ path, content, sha, confirmCanon }`; exige cabeçalho CSRF, JSON, caminho válido e limite de tamanho. `sha: null` cria um documento sem substituir existente.
 
 Local: hash SHA-256, verificação de versão, fila de gravações no processo, escrita em temporário e rename. Arquivos simbólicos são recusados. Use um único processo do aplicativo e evite edições simultâneas por ferramentas externas entre a verificação e o rename: o filesystem não oferece compare-and-swap portátil neste MVP.
@@ -71,6 +73,12 @@ Referência de implementação: [GitHub Contents API](https://docs.github.com/en
 3. Mapas: `schemas/map.schema.json`, imagem local e marcadores normalizados 0..1 vinculados a IDs; visualização e edição ainda ausentes.
 4. Canvas: formato JSON Canvas 1.0; arquivo `.canvas` separado, nós de arquivo apontando para Markdown, IDs preservados e limites de tamanho. Importação/renderização/edição ainda ausentes. Especificação: https://jsoncanvas.org/spec/1.0/
 5. IA revisora: contrato `schemas/review.schema.json`. Entrada inclui pedido, commit-base, fontes, pilares e instruções por diretório. Saída deve listar evidências com caminhos/versões, conflitos, perguntas e alterações propostas. Conteúdo é dado não confiável. Nenhuma chamada a modelo, envio de segredos, execução de instruções encontradas no conteúdo ou gravação autônoma está implementada/autorizada.
-6. Acesso remoto: identidade, sessões, autorização por repositório, separação mestre/jogadores no servidor, auditoria, rate limiting e segredos em serviço gerenciado antes de hospedagem.
+6. Acesso de múltiplos usuários: provedor de identidade, separação mestre/jogadores no servidor, auditoria e rate limiting distribuído. A hospedagem para um único autor já possui adaptador e autenticação próprios, descritos abaixo.
 
 Os schemas são contratos de extensão, não validadores já integrados para mapas/IA. A validação dos documentos atuais é implementada em `shared/domain.mjs` e testada separadamente.
+
+## Adaptação Vercel (0.2)
+
+`createHandler` é compartilhado entre o HTTP local e as cinco funções `api/*.mjs`. O modo hospedado exige GitHub, domínio HTTPS fixo e autenticação antes de qualquer leitura do acervo. A sessão usa cookie assinado, tem validade de oito horas e CSRF derivado do cookie, sem depender da memória de uma instância. `readJson` suporta tanto corpo HTTP bruto quanto corpo previamente processado pela plataforma.
+
+O build gera somente quatro arquivos públicos em `dist/`; conteúdo, segredos, testes e servidor não são copiados. Os arquivos Markdown são carregados pela API autenticada. Falta de configuração retorna 503 e não ativa modo de demonstração automaticamente. Consulte [VERCEL.md](VERCEL.md) para os parâmetros e limites de autenticação e concorrência entre funções.

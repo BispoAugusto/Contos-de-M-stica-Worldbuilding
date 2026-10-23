@@ -12,4 +12,10 @@ O sandbox bloqueou rede loopback e rename na primeira execução; os testes fora
 
 Não foi feita escrita no GitHub através da credencial de runtime do aplicativo, pois essa credencial ainda não está configurada. O código será enviado pelo conector GitHub desta conversa; isso valida acesso ao repositório, mas não substitui um teste real do adaptador no ambiente final.
 
-Mapas, Canvas, IA, hospedagem remota, autenticação multiusuário e operações de mover/renomear/excluir estão fora desta entrega inicial e não devem ser anunciados como disponíveis.
+Mapas, Canvas, IA, autenticação multiusuário e operações de mover/renomear/excluir estão fora desta entrega inicial e não devem ser anunciados como disponíveis.
+
+## Adaptação Vercel
+
+Em 23/10/2026, o conjunto passou a 16 testes aprovados. Os quatro novos testes verificam bloqueio sem autenticação, origem/chave de login, atributos do cookie, assinatura/expiração, CSRF entre sessões e funcionamento entre instâncias sem estado compartilhado. O build gera somente os quatro arquivos públicos previstos. O adaptador aceita corpo já processado pela plataforma.
+
+Isso verifica a implementação localmente; uma publicação Vercel funcional ainda precisa ser confirmada no domínio real, com acesso à conta e variáveis privadas configuradas. Não confundir build local com deploy concluído.

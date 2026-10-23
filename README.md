@@ -2,6 +2,12 @@
 
 MVP de navegador/editor Markdown com vínculos, grafo, entidades e proteção editorial do cânone. O repositório estava vazio quando inspecionado em 23/10/2026; nenhum conteúdo narrativo foi migrado ou inventado.
 
+## Hospedar na Vercel
+
+A versão 0.2 inclui configuração de build e funções para Vercel, com acesso privado de autor. O código continua no GitHub e o acervo é persistido em uma branch separada. Leia [o guia de publicação](docs/VERCEL.md) para importar o repositório e configurar domínio, autenticação e credencial GitHub somente no servidor.
+
+Sem os segredos necessários, o site permanece bloqueado. A conexão GitHub usada para publicar o código não fornece automaticamente a credencial de edição do conteúdo em runtime.
+
 ## Executar
 
 Requer Node.js 22 ou mais recente. Sem dependências ou etapa de instalação.
@@ -47,7 +53,7 @@ Use uma credencial restrita a esse repositório com Contents read/write. A branc
 - Provedores local e GitHub; token só no servidor, caminhos restritos e conflitos de versão.
 - Instruções para agentes, arquitetura, modelo de segurança e contratos para mapas/Canvas/IA.
 
-Limites: Markdown básico e subconjunto explícito de YAML; sem mover, renomear ou excluir; mapas, Canvas e IA ainda não implementados. Somente uso local pelo autor, sem autenticação remota nem acesso de jogadores. Consulte [arquitetura](docs/ARCHITECTURE.md) e [segurança](docs/SECURITY.md) antes de ampliar ou hospedar.
+Limites: Markdown básico e subconjunto explícito de YAML; sem mover, renomear ou excluir; mapas, Canvas e IA ainda não implementados. Acesso exclusivo do autor, localmente ou na Vercel, sem contas de jogadores. Consulte [arquitetura](docs/ARCHITECTURE.md), [segurança](docs/SECURITY.md) e [publicação](docs/VERCEL.md) antes de ampliar ou hospedar.
 
 ## Verificar
 

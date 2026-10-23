@@ -23,4 +23,4 @@
 - Credenciais GitHub somente no ambiente do servidor. Escritas remotas somente em branch de trabalho configurada.
 - Execute `node --test tests/*.test.mjs` após mudanças de comportamento. Teste conflitos e permissões quando tocar na persistência.
 - Documente limites reais. Não apresente mapas, Canvas, autenticação multiusuário ou IA como implementados enquanto forem apenas contratos.
-- Não publique o servidor local na rede: a autenticação remota ainda não existe.
+- Não publique o servidor local na rede. Para Vercel, use exclusivamente as funções de `api/` com autenticação em `server/auth.mjs`, origem HTTPS fixa e configuração de `docs/VERCEL.md`. Nunca exponha o provedor local pela Vercel.

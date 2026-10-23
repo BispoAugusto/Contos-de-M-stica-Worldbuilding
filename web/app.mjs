@@ -6,7 +6,7 @@ function message(text = '') { $('message').textContent = text; }
 async function api(url, options) {
   const response = await fetch(url, options);
   const data = await response.json();
-  if (!response.ok) throw new Error(data.error || `Erro ${response.status}`);
+  if (!response.ok) { const error = new Error(data.error || `Erro ${response.status}`); error.status = response.status; throw error; }
   return data;
 }
 function canLeave() { return !state.busy && (!state.dirty || confirm('Descartar as alterações não salvas? Baixe o rascunho antes de sair se quiser preservá-las.')); }
@@ -108,7 +108,7 @@ function renderGraph() {
   if (!state.docs.length) $('graph-list').append(el('p', 'Crie uma página para começar.', 'empty'));
 }
 async function refresh(preferred = state.current) {
-  const data = await api('/api/index');
+  const data = await api('/api/catalog');
   state.files = data.files; state.docs = data.documents; state.findings = data.findings;
   $('stats').replaceChildren();
   for (const [count, label] of [[state.docs.length, 'documentos'], [state.docs.reduce((n, d) => n + d.links.filter(l => l.kind === 'internal').length, 0), 'vínculos'], [state.docs.filter(d => d.meta.type === 'pilar').length, 'pilares']]) { const node = el('div'); node.append(el('strong', String(count)), el('small', label)); $('stats').append(node); }
@@ -150,9 +150,32 @@ $('create-form').onsubmit = event => {
   state.current = path; state.original = ''; state.sha = null; $('path').textContent = path; $('title').textContent = 'Nova proposta'; $('editor').value = content; $('confirm-canon').checked = false; setDirty(true); renderContext(parseDocument(content, path)); view('library'); setMode(true); $('create-dialog').close(); message('Rascunho criado. O arquivo será gravado ao salvar.');
 };
 window.addEventListener('beforeunload', event => { if (state.dirty || state.busy) { event.preventDefault(); event.returnValue = ''; } });
+async function initialize() {
 try {
   state.session = await api('/api/session');
+  $('login-panel').hidden = true; $('logout').hidden = !state.session.hosted;
   $('connection').textContent = state.session.mode === 'github' ? `GitHub · ${state.session.branch}` : '● Acervo local · servidor neste computador';
   $('banner').textContent = state.session.demo ? 'MODO DE EXEMPLOS · Todo o conteúdo abaixo demonstra o aplicativo. Nenhum documento representa o cânone de Contos de Mística.' : 'ACERVO DO AUTOR · Classificação editorial explícita. Somente o autor pode aprovar fatos e pilares do mundo.';
   await refresh();
-} catch (error) { message(error.message); $('banner').textContent = 'Não foi possível carregar o acervo. Verifique a configuração do servidor.'; }
+} catch (error) {
+  message(error.message);
+  if (error.status === 401) {
+    view('login-panel'); $('connection').textContent = 'Acesso privado · autenticação necessária';
+    $('banner').textContent = 'ACERVO PRIVADO · Entre para consultar ou editar seus documentos.';
+  } else $('banner').textContent = 'Não foi possível carregar o acervo. Verifique a configuração do servidor.';
+}
+}
+$('login-form').onsubmit = async event => {
+  event.preventDefault(); const key = $('access-key').value;
+  $('access-key').value = '';
+  try { await api('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key }) }); message(); await initialize(); }
+  catch (error) { message(error.message); }
+};
+$('logout').onclick = async () => {
+  if (!canLeave()) return;
+  try {
+    await api('/api/logout', { method: 'POST', headers: { 'X-CSRF-Token': state.session.csrf } });
+    setDirty(false); location.reload();
+  } catch (error) { message(error.message); }
+};
+await initialize();
